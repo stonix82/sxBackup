@@ -1,0 +1,11 @@
+#!/bin/bash
+
+. /root/Scripts/Backup/Config/sx.backup
+
+H=$Host
+N='fullbackup'
+
+S="$DIR_Incr/"
+D="$DIR_Full`date +%F`"
+
+$CMD_F $H $N $S $D
