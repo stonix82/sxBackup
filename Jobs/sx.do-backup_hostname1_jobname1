@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. /root/Scripts/Backup/Config/sx.backup
+. /root/Scripts/Backup/Config/sx.settings
 
 H="server1"
 N="job1"

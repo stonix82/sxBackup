@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. /root/Scripts/Backup/Config/sx.backup
+. /root/Scripts/Backup/Config/sx.settings
 . /root/Scripts/Backup/Config/sx.joblist
 
 if [[ "`cat $DIR_Stat/$Host`" == 'running' ]]; then

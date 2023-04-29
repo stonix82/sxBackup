@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. /root/Scripts/Backup/Config/sx.backup
+. /root/Scripts/Backup/Config/sx.settings
 . /root/Scripts/Backup/Config/sx.ips
 
 RHost=$1

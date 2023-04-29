@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. /root/Scripts/Backup/Config/sx.backup
+. /root/Scripts/Backup/Config/sx.settings
 
 Users=`users`
 Stat=`cat $DIR_Stat/$Host`
