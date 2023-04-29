@@ -1,0 +1,10 @@
+#!/bin/bash
+
+. /root/Scripts/Backup/Config/sx.backup
+
+H="server1"
+N="job1"
+S="/var/www/html"
+D="/"
+
+$CMD_R $H $N $S $D

@@ -1,0 +1,40 @@
+#!/bin/bash
+
+. /root/Scripts/Backup/Config/sx.backup
+
+Users=`users`
+Stat=`cat $DIR_Stat/$Host`
+backup_ok=1
+force=$1
+
+# if no user logged in
+if [[ "$Stat" == "completed" ]]; then
+
+    if [[ -z "$Users" ]] || [[ "$force" == "force" ]]; then
+
+        for f in `ls $DIR_Stat/_*`; do
+ 
+            Stat=`/bin/cat $f`
+ 
+            if [[ "$Stat" != "OK" ]]; then
+ 
+                backup_ok=0
+ 
+            fi
+ 
+        done
+ 
+        if [[ $backup_ok -eq 1 ]]; then
+ 
+            for f in `ls $DIR_Stat/_*`; do
+ 
+                echo -n WAITING > $f
+ 
+            done
+            $Netlog "Auto shutdown after backup run"
+            echo -n finished > $DIR_Stat/$Host
+            /sbin/shutdown -h now
+ 
+        fi
+    fi
+fi

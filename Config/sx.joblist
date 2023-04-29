@@ -1,0 +1,17 @@
+#!/bin/bash
+
+KEY=(
+'hostname1_jobname1'
+'hostname1_jobname2'
+'hostname2_jobname1'
+'hostname2_jobname2'
+'fullbackup'
+)
+
+declare -A Descr
+
+Descr[hostname1_jobname1]='@host1 - Backup of libraries'
+Descr[hostname1_jobname2]='@host1 - Backup of homes'
+Descr[hostname2_jobname1]='@host2 - Backup of apache'
+Descr[hostname2_jobname2]='@host2 - Backup of letsencrypt'
+Descr[fullbackup]='Full backup of all jobs'

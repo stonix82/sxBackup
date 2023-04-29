@@ -1,0 +1,25 @@
+#!/bin/bash
+
+. /root/Scripts/Backup/Config/sx.backup
+. /root/Scripts/Backup/Config/sx.ips
+
+RHost=$1
+Name=$2
+
+SRC=$3
+DST="$DIR_Incr/$Domain/$RHost$4"
+
+Monitoring=$RHost"_"$Name
+
+del=""
+if [[ `date +%u` == "2" ]]; then
+    del="--delete"
+fi
+
+$CMD_Sync $del $SRC $DST
+
+if [[ "$?" -eq "0" ]]; then
+    $CMD_Stat "echo -n OK > $StatusPath_Incr$Monitoring"
+else
+    $CMD_Stat "echo -n FAIL > $StatusPath_Incr$Monitoring"
+fi

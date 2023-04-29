@@ -1,0 +1,20 @@
+#!/bin/bash
+
+. /root/Scripts/Backup/Config/sx.backup
+. /root/Scripts/Backup/Config/sx.ips
+
+Host=$1
+Name=$2
+
+SRC=$3
+DST=$4
+
+Monitoring=$2
+
+$CMD_Sync $SRC $DST
+
+if [[ "$?" -eq "0" ]]; then
+    $CMD_Stat "echo -n OK > $StatusPath_Full$Monitoring"
+else
+    $CMD_Stat "echo -n FAIL > $StatusPath_Full$Monitoring"
+fi

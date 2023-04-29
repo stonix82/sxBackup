@@ -1,0 +1,53 @@
+#!/bin/bash
+
+# server parameters
+Domain='mydomain.org'
+LogServer='10.0.0.100'
+MonServer='10.0.0.101'
+
+DIR_Base='/root/Scripts/Backup'         # base directory of THIS program
+
+# Backup destination
+DIR_Backup='/backup'                    # Backup base directory
+DIR_Stat="$DIR_Backup/status"           # Backup status directory
+DIR_Incr="$DIR_Backup/latest"           # incremential backups
+DIR_Full="$DIR_Backup/snapshots/"       # full backups
+
+# command for logging to the remote log server
+Netlog="/bin/logger -n $LogServer -P 514 -d --rfc3164"
+
+# SSH parameters
+SSH_Key_Name='backup_mars'              # private key file name
+SSH_Key_Path='/root/.ssh'               # directory to private key
+SSH_Key="$SSH_Key_Path/$SSH_Key_Name"   # private key full file name
+SSH_CMD="/bin/ssh -i $SSH_Key"          # ssh command with private key
+
+# monitoring parameters
+StatusPath_Incr='/path/to/job/status'        # path to incr. backup status files
+StatusPath_Full='/path/to/fullbackup/status' # path to full backuo status file
+CMD_Stat="$SSH_CMD -l root $MonServer"       # ssh command for login
+
+
+
+### base config (should not edit)
+Host=`hostname`
+
+# rsync parameters
+SSH_Key_Opt="-e $SSH_CMD"               # rsync option with ssh connection
+CMD_Sync='/usr/bin/rsync --mkpath --exclude="lost+found" -Pav'
+
+# Full backup
+buffer=10485760 # buffer size at the destination space of full backups (10G)
+
+# Backup scripts directories
+DIR_Temp="$DIR_Base/Templates"          # template directory
+DIR_Jobs="$DIR_Base/Jobs"               # job directory
+
+# Backup templates
+CMD_R=$DIR_Temp"/sx.do-remote-backup"   # template for remote backup
+CMD_L=$DIR_Temp"/sx.do-local-backup"    # template for local backup
+CMD_S=$DIR_Temp"/sx.do-special-backup"  # template for remote backup w/excludes
+CMD_F=$DIR_Temp"/sx.do-full-backup"     # template for full backup
+
+# Backup jobs file name prefix
+Script_PF="sx.do-backup_"

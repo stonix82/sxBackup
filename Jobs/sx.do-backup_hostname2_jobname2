@@ -1,0 +1,10 @@
+#!/bin/bash
+
+. /root/Scripts/Backup/Config/sx.backup
+
+H="server2"
+N="job2"
+S="/etc/letsencrypt"
+D="/"
+
+$CMD_R $H $N $S $D

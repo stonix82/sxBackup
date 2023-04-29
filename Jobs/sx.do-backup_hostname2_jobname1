@@ -1,0 +1,10 @@
+#!/bin/bash
+
+. /root/Scripts/Backup/Config/sx.backup
+
+H="server2"
+N="job1"
+S="/etc/apache2"
+D="/"
+
+$CMD_S $H $N $S $D

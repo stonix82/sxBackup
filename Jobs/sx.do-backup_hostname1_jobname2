@@ -1,0 +1,10 @@
+#!/bin/bash
+
+. /root/Scripts/Backup/Config/sx.backup
+
+H="server1"
+N="job2"
+S="/home"
+D="/"
+
+$CMD_S $H $N $S $D

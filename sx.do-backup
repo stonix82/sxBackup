@@ -1,0 +1,62 @@
+#!/bin/bash
+
+. /root/Scripts/Backup/Config/sx.backup
+. /root/Scripts/Backup/Config/sx.joblist
+
+if [[ "`cat $DIR_Stat/$Host`" == 'running' ]]; then
+    exit
+else
+    echo -n running > $DIR_Stat/$Host
+fi
+
+NL_Start='- [INIT] Backup:'
+NL_OK='- [ OK ] Backup:'
+NL_ER='- [FAIL] Backup:'
+
+$Netlog "Start backup processes..."
+overall_er=0
+overall=0
+
+function do_backup {
+
+    $Netlog $NL_Start ${Descr[$1]}
+
+    if [[ `$DIR_Jobs/$Script_PF$1` ]]; then
+        $Netlog $NL_OK ${Descr[$1]}
+        echo -n "OK" > $DIR_Stat/_$1
+        overall=$((overall+1))
+    else
+        $Netlog $NL_ER ${Descr[$1]}
+        echo -n "FAIL" > $DIR_Stat/_$1
+        overall_er=$((overall_er+1))
+    fi
+}
+
+# This runs every day
+for k in "${KEY[@]}"; do
+
+    # Full-backup not every day
+    if [[ "$k" != "fullbackup" ]]; then
+        do_backup $k
+    else
+        # only once a week on Monday
+        if [[ `date +%u` == "1" ]]; then
+            if [[ `$DIR_Base/sx.do-delete` ]]; then
+                do_backup $k
+            else
+                echo -n "FAIL" > $DIR_Stat/_$k
+            fi
+        else
+            echo -n "OK" > $DIR_Stat/_$k            
+        fi
+    fi
+done
+
+
+if [[ $overall_er > 0 ]]; then
+    $Netlog "... finished with $overall_er errors."
+else
+    $Netlog "... all $overall backups completed successfully."
+fi
+
+echo -n "completed" > $DIR_Stat/$Host

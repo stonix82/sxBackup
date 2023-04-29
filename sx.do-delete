@@ -1,0 +1,100 @@
+#!/bin/bash
+
+. /root/Scripts/Backup/Config/sx.backup
+
+$Netlog "Starting check and calculating free disk space..."
+
+function free_enough {
+
+    result_free=`/bin/df $DIR_Full --output=avail`
+    result_size=`/bin/du -d 0 $DIR_Incr`
+
+    free=""
+    size=""
+    res=""
+
+    if [[ "$result_free" =~ ([0-9]+) ]]; then
+        free=${BASH_REMATCH[1]}
+
+        TXT=`printf '... free  : %10i\n' $free`
+        $Netlog "$TXT"
+
+        TXT=`printf '... buffer: %10i\n' $buffer`
+        $Netlog "$TXT"
+
+        free=$((free - buffer))
+        TXT=`printf '... usable: %10i\n' $free`
+        $Netlog "$TXT"
+
+    else
+        res="FAIL"
+        $Netlog " - [FAIL] Can't determine free disk space"
+    fi
+
+    if [[ "$result_size" =~ ([0-9]+) ]]; then
+        size=${BASH_REMATCH[1]}
+        TXT=`printf '... need  : %10i\n' $size`
+        $Netlog "$TXT"
+    else
+        res="FAIL"
+        $Netlog " - [FAIL] Can't determine size of backup"
+    fi
+
+    if [[ "$res" == "" ]]; then
+
+        if [[ $free -gt $size  ]]; then
+            res="OK"
+            $Netlog " - [ OK ] Free disk space available"
+        else
+            res="NOK"
+            $Netlog " - [NOGO] Required disk space not available"
+        fi
+
+    fi
+}
+
+free_enough
+
+if [[ "$res" == "FAIL" ]]; then
+
+    $Netlog " - [FAIL] Unable to calculate required disk space"
+    exit "-1"
+
+fi
+
+d=0
+while [ "$res" == "NOK"  ]; do
+
+    d=$((d++))
+
+    if [[ "$d" -eq 4 ]]; then
+        $Netlog " - [CRIT] Too many delete cycles: $d"
+        exit -2
+    fi
+
+    i=0;
+    declare -a Snaps;
+
+    for snap in `/bin/ls $DIR_Full`; do
+
+        if [[ "$snap" =~ ([0-9]+[\-][0-9]+[\-][0-9]+) ]]; then
+            Snaps[$((i++))]="$snap"
+        fi
+
+    done
+
+    $Netlog " - [INIT] Delete oldest snapshot: $DIR_Full${Snaps[0]}"
+
+    if [[ "$DIR_Full${Snaps[0]}" != "/" ]]; then
+
+        /bin/rm -rf $DIR_Full${Snaps[0]}
+
+    fi
+
+    $Netlog " - [DONE] Deleted oldest snapshot: $DIR_Full${Snaps[0]}"
+
+    free_enough
+
+done
+
+exit 0
