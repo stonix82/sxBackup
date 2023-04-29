@@ -16,7 +16,7 @@ if [[ `date +%u` == "2" ]]; then
     del="--delete"
 fi
 
-$CMD_Sync $del --exclude-from "/root/Scripts/Backup/Exclude/$Monitoring" "$SSH_Key_Opt" root@${IP[$RHost]}:$SRC $DST
+$CMD_Sync $del --exclude-from "/root/Scripts/Backup/Exclude/$Monitoring" "$SSH_Key_Opt" $BUser@${IP[$RHost]}:$SRC $DST
 
 if [[ "$?" -eq "0" ]]; then
     $CMD_Stat "echo -n OK > $StatusPath_Incr$Monitoring"

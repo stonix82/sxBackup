@@ -5,6 +5,9 @@ Domain='mydomain.org'
 LogServer='10.0.0.100'
 MonServer='10.0.0.101'
 
+# Backup user
+BUser='root'
+
 DIR_Base='/root/Scripts/Backup'         # base directory of THIS program
 
 # Backup destination
@@ -25,7 +28,7 @@ SSH_CMD="/bin/ssh -i $SSH_Key"          # ssh command with private key
 # monitoring parameters
 StatusPath_Incr='/path/to/job/status'        # path to incr. backup status files
 StatusPath_Full='/path/to/fullbackup/status' # path to full backuo status file
-CMD_Stat="$SSH_CMD -l root $MonServer"       # ssh command for login
+CMD_Stat="$SSH_CMD -l $BUser $MonServer"     # ssh command for login
 
 
 
