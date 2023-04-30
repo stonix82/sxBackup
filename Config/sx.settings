@@ -20,7 +20,7 @@ DIR_Full="$DIR_Backup/snapshots/"       # full backups
 Netlog="/bin/logger -n $LogServer -P 514 -d --rfc3164"
 
 # SSH parameters
-SSH_Key_Name='backup_mars'              # private key file name
+SSH_Key_Name='id_rsa'                   # private key file name
 SSH_Key_Path='/root/.ssh'               # directory to private key
 SSH_Key="$SSH_Key_Path/$SSH_Key_Name"   # private key full file name
 SSH_CMD="/bin/ssh -i $SSH_Key"          # ssh command with private key
