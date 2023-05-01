@@ -13,7 +13,7 @@ Monitoring=$2
 
 $CMD_Sync $SRC $DST
 
-if [[ "$?" -eq "0" ]]; then
+if [[ "$?" == "0" ]]; then
     $CMD_Stat "echo -n OK > $StatusPath_Full$Monitoring"
 else
     $CMD_Stat "echo -n FAIL > $StatusPath_Full$Monitoring"

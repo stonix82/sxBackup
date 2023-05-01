@@ -2,7 +2,7 @@
 
 . /root/Scripts/Backup/Config/sx.settings
 
-$Netlog "Starting check and calculating free disk space..."
+$Netlog $NL_TXT_INIT "Starting check and calculating free disk space..."
 
 function free_enough {
 
@@ -28,7 +28,7 @@ function free_enough {
 
     else
         res="FAIL"
-        $Netlog " - [FAIL] Can't determine free disk space"
+        $Netlog $NL_TXT_FAIL "Can't determine free disk space"
     fi
 
     if [[ "$result_size" =~ ([0-9]+) ]]; then
@@ -37,17 +37,17 @@ function free_enough {
         $Netlog "$TXT"
     else
         res="FAIL"
-        $Netlog " - [FAIL] Can't determine size of backup"
+        $Netlog $NL_TXT_FAIL "Can't determine size of backup"
     fi
 
     if [[ "$res" == "" ]]; then
 
         if [[ $free -gt $size  ]]; then
             res="OK"
-            $Netlog " - [ OK ] Free disk space available"
+            $Netlog $NL_TXT_OK "Free disk space available"
         else
-            res="NOK"
-            $Netlog " - [NOGO] Required disk space not available"
+            res="NOGO"
+            $Netlog $NL_TXT_NOGO "Required disk space not available"
         fi
 
     fi
@@ -57,18 +57,18 @@ free_enough
 
 if [[ "$res" == "FAIL" ]]; then
 
-    $Netlog " - [FAIL] Unable to calculate required disk space"
+    $Netlog $NL_TXT_FAIL "Unable to calculate required disk space"
     exit "-1"
 
 fi
 
 d=0
-while [ "$res" == "NOK"  ]; do
+while [ "$res" == "NOGO"  ]; do
 
     d=$((d++))
 
-    if [[ "$d" -eq 4 ]]; then
-        $Netlog " - [CRIT] Too many delete cycles: $d"
+    if [[ "$d" == 4 ]]; then
+        $Netlog $NL_TXT_CRIT "Maximum deletes of $d reached."
         exit -2
     fi
 
@@ -83,7 +83,7 @@ while [ "$res" == "NOK"  ]; do
 
     done
 
-    $Netlog " - [INIT] Delete oldest snapshot: $DIR_Full${Snaps[0]}"
+    $Netlog $NL_TXT_INIT "Delete oldest snapshot: $DIR_Full${Snaps[0]}"
 
     if [[ "$DIR_Full${Snaps[0]}" != "/" ]]; then
 
@@ -91,10 +91,8 @@ while [ "$res" == "NOK"  ]; do
 
     fi
 
-    $Netlog " - [DONE] Deleted oldest snapshot: $DIR_Full${Snaps[0]}"
+    $Netlog $NL_TXT_DONE "Deleted oldest snapshot: $DIR_Full${Snaps[0]}"
 
     free_enough
 
 done
-
-exit 0

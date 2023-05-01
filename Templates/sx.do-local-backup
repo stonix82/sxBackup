@@ -18,7 +18,7 @@ fi
 
 $CMD_Sync $del $SRC $DST
 
-if [[ "$?" -eq "0" ]]; then
+if [[ "$?" == "0" ]]; then
     $CMD_Stat "echo -n OK > $StatusPath_Incr$Monitoring"
 else
     $CMD_Stat "echo -n FAIL > $StatusPath_Incr$Monitoring"

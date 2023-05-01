@@ -18,6 +18,12 @@ DIR_Full="$DIR_Backup/snapshots/"       # full backups
 
 # command for logging to the remote log server
 Netlog="/bin/logger -n $LogServer -P 514 -d --rfc3164"
+NL_TXT_OK='- [ OK ] Backup:'
+NL_TXT_INIT='- [INIT] Backup:'
+NL_TXT_FAIL='- [FAIL] Backup:'
+NL_TXT_NOGO='- [NOGO] Full-Backup:'
+NL_TXT_CRIT='- [CRIT] Full-Backup:'
+NL_TXT_DONE='- [DONE] Full-Backup:'
 
 # SSH parameters
 SSH_Key_Name='id_rsa'                   # private key file name
