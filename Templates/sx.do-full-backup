@@ -9,12 +9,12 @@ Name=$2
 SRC=$3
 DST=$4
 
-Monitoring=$2
+Monitoring=$Name"_"$Host
 
 $CMD_Sync $SRC $DST
 
 if [[ "$?" == "0" ]]; then
-    $CMD_Stat "echo -n OK > $StatusPath_Full$Monitoring"
+    $CMD_Stat "echo -n OK > $MonitoringPath_Full$Monitoring"
 else
-    $CMD_Stat "echo -n FAIL > $StatusPath_Full$Monitoring"
+    $CMD_Stat "echo -n FAIL > $MonitoringPath_Full$Monitoring"
 fi

@@ -8,7 +8,7 @@ MonServer='10.0.0.101'
 # Backup user
 BUser='root'
 
-DIR_Base='/root/Scripts/Backup'         # base directory of THIS program
+DIR_Base='~/sxBackup'                   # base directory of THIS program
 
 # Backup destination
 DIR_Backup='/backup'                    # Backup base directory
@@ -32,9 +32,9 @@ SSH_Key="$SSH_Key_Path/$SSH_Key_Name"   # private key full file name
 SSH_CMD="/bin/ssh -i $SSH_Key"          # ssh command with private key
 
 # monitoring parameters
-StatusPath_Incr='/path/to/job/status'        # path to incr. backup status files
-StatusPath_Full='/path/to/fullbackup/status' # path to full backuo status file
-CMD_Stat="$SSH_CMD -l $BUser $MonServer"     # ssh command for login
+MonitoringPath_Incr='/var/www/backups/'    # path to incr. backup status files
+MonitoringPath_Full='/var/www/backups/'    # path to full backuo status file
+CMD_Stat="$SSH_CMD -l $BUser $MonServer"   # ssh command for login
 
 
 
@@ -60,3 +60,5 @@ CMD_F=$DIR_Temp"/sx.do-full-backup"     # template for full backup
 
 # Backup jobs file name prefix
 Script_PF="sx.do-backup_"
+
+

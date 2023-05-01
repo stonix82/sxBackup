@@ -9,7 +9,7 @@ Name=$2
 SRC=$3
 DST="$DIR_Incr/$Domain/$RHost$4"
 
-Monitoring=$RHost"_"$Name
+Monitoring="_$Host\_$RHost\_$Name"
 
 del=""
 if [[ `date +%u` == "2" ]]; then
@@ -19,7 +19,7 @@ fi
 $CMD_Sync $del $SRC $DST
 
 if [[ "$?" == "0" ]]; then
-    $CMD_Stat "echo -n OK > $StatusPath_Incr$Monitoring"
+    $CMD_Stat "echo -n OK > $MonitoringPath_Incr$Monitoring"
 else
-    $CMD_Stat "echo -n FAIL > $StatusPath_Incr$Monitoring"
+    $CMD_Stat "echo -n FAIL > $MonitoringPath_Incr$Monitoring"
 fi
