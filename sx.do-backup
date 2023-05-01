@@ -1,5 +1,7 @@
 #!/bin/bash
 
+Start=`date +%s`
+
 . /root/Scripts/Backup/Config/sx.settings
 . /root/Scripts/Backup/Config/sx.joblist
 
@@ -39,18 +41,21 @@ for k in "${KEY[@]}"; do
         if [[ `date +%u` == "1" ]]; then
             $DIR_Base/sx.do-delete \
             && do_backup $k \
-            || echo -n "FAIL" > $DIR_Stat/_$k
-        else
-            echo -n "OK" > $DIR_Stat/_$k            
+            || $Netlog $NL_TXT_FAIL "Something's goes wrong during delete."
         fi
     fi
 done
 
+End=`date +%s`
+
+Diff=`expr $End - $Start`
+Hrs=`echo "scale=3;$Diff/3600" | bc -l`
+
 
 if [[ $overall_er > 0 ]]; then
-    $Netlog "... finished with $overall_er errors."
+    $Netlog "... finished with $overall_er errors in $Diff seconds ($Hrs hrs)."
 else
-    $Netlog "... all $overall backups completed successfully."
+    $Netlog "... all $overall backups completed successfully in $Diff seconds ($Hrs hrs)."
 fi
 
 echo -n "completed" > $DIR_Stat/$Host
