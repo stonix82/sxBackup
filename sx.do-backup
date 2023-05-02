@@ -42,6 +42,8 @@ for k in "${KEY[@]}"; do
             $DIR_Base/sx.do-delete \
             && do_backup $k \
             || $Netlog $NL_TXT_FAIL "Something's goes wrong during delete."
+        else
+            echo -n "OK" > $DIR_Stat/_$k
         fi
     fi
 done
